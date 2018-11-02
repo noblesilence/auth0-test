@@ -7,15 +7,16 @@ import Callback from "./Callback";
 import "./App.css";
 
 class App extends Component {
-  async componentDidMount() {
+  componentDidMount() {
     if (this.props.location.pathname === "/callback") return;
-    try {
-      await auth0Client.silentAuth();
-      this.forceUpdate();
-    } catch (err) {
-      if (err.error === "login_required") return;
-      console.log(err.error);
-    }
+
+    auth0Client
+      .silentAuth()
+      .then(() => this.forceUpdate())
+      .catch(err => {
+        if (err.error === "login_required") return;
+        console.log(err.error);
+      });
   }
 
   render() {
